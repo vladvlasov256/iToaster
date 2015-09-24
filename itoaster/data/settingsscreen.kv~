@@ -1,0 +1,121 @@
+#.kivy 1.0
+
+#:import Settings settings.Settings
+
+#:set bk_r 0.836
+#:set bk_s .95
+
+<SettingsLayout@FloatLayout>:
+    canvas.before:
+        BorderImage:
+            source: 'data/Toast.png'
+            pos: self.pos
+            size: self.size
+
+FloatLayout:
+    orientation: 'vertical'
+
+    SettingsLayout:
+        pos_hint: {'center_x':.5,'center_y':.5}
+        size_hint: bk_s / max(1, root.size[0] * 1.0 / root.size[1]), bk_s / bk_r * min(1, root.size[0] * 1.0 / root.size[1])
+
+        GridLayout:
+            pos_hint: {'center_x':.5,'center_y':.8}
+            size_hint: .7, .15
+            orientation: 'horizontal'
+            rows: 1
+
+            BoxLayout:
+                size_hint_x: .55
+                orientation: 'vertical'
+
+                Label:
+                    color: 0, 0, 0, 1
+                    text: 'IP:'
+                    font_size: 36
+
+                TextInput:
+                    id: ip
+                    text: '127.0.0.1'
+                    multiline: False
+                    font_size: 30
+                    on_text_validate: app.kv_callback('on_ip_enter', args[0].text)
+
+            BoxLayout:
+                size_hint_x: .25
+                orientation: 'vertical'
+
+                Label:
+                    color: 0, 0, 0, 1
+                    text: 'Port:'
+                    font_size: 30
+
+                TextInput:
+                    id: port
+                    text: '50007'
+                    multiline: False
+                    font_size: 36
+                    input_filter: int
+                    on_text_validate: app.kv_callback('on_port_enter', args[0].text)
+
+            BoxLayout:
+                size_hint_x: .1
+                orientation: 'vertical'
+
+                Label:
+
+                Image:
+                    id: toaster_state
+
+        GridLayout:
+            pos_hint: {'center_x':.5,'center_y':.5}
+            size_hint: .7, .15
+            orientation: 'horizontal'
+            rows: 1
+
+            BoxLayout:
+                size_hint_x: .6
+                orientation: 'vertical'
+
+                Label:
+                    color: 0, 0, 0, 1
+                    text: 'Toasting time:'
+                    font_size: 36
+
+                Slider:
+                    id: time_slider
+                    orientation: 'horizontal'
+                    min: Settings.MIN_TOASTING_TIME
+                    max: Settings.MAX_TOASTING_TIME
+                    on_value: root.ids['time_label'].text = '%02d:%02d' % (int(args[1]) / 60, int(args[1]) % 60)
+
+            BoxLayout:
+                size_hint_x: .1
+                orientation: 'vertical'
+
+                Label:
+
+                Label:
+                    id: time_label
+                    color: 0, 0, 0, 1
+                    size_hint_x: .1
+                    font_size: 36
+                    pos_hint: {'center_x':.5,'center_y':.5}
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint: 1, .2
+
+        Button:
+            id: ok_button
+            text: 'OK'
+            size_hint_x: .4
+            size_hint_y: .3
+            on_press: app.kv_callback('on_ok_button_press')
+
+        Button:
+            id: cancel_button
+            text: 'Cancel'
+            size_hint_x: .4
+            size_hint_y: .3
+            on_press: app.kv_callback('on_cancel_button_press')

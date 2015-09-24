@@ -1,0 +1,48 @@
+#.kivy 1.0
+
+#:set bk_r 1.308
+#:set bk_s .95
+
+<ToasterLayout@FloatLayout>:
+    canvas.before:
+        BorderImage:
+            source: 'data/CWT215.png'
+            pos: self.pos
+            size: self.size
+FloatLayout:
+    orientation: 'vertical'
+
+    AnchorLayout:
+        pos_hint: {'center_x':.5,'center_y':.65}
+        size_hint: .95, .95
+
+        ToasterLayout:
+            orientation: 'vertical'
+            size_hint: bk_s / max(1, root.size[0] * 1.0 / root.size[1]), bk_s / bk_r * min(1, root.size[0] * 1.0 / root.size[1])
+
+            Label:
+                id: display
+                pos_hint: {'center_x':.5,'center_y':.6}
+                size_hint: .2, .1
+                text: '---'
+                font_size: 60
+                halign: 'center'
+                readonly: True
+
+            Button:
+                id: reset_button
+                pos_hint: {'center_x':.5,'center_y':.2}
+                size_hint: .07, .0475
+                background_normal: 'data/Reset.png'
+                background_down: 'data/ResetPressed.png'
+                border: 0, 0, 0, 0
+                on_press: app.kv_callback('on_reset_button_press')
+
+    BoxLayout:
+        pos_hint: {'center_x':.5,'center_y':.25}
+        size_hint: .5 if root.size[0] < root.size[1] else .5 * root.size[1] / root.size[0], .08
+
+        Button:
+            id: settings_button
+            text: 'Settings'
+            on_press: app.kv_callback('on_settings_button_press')
